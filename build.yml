@@ -1,0 +1,28 @@
+name: Build HackBGRT
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: >-
+          make
+          mingw-w64-x86_64-gcc
+
+    - name: Build with Make
+      run: |
+        mingw32-make
+
+    - name: Upload Build Folder
+      uses: actions/upload-artifact@v4
+      with:
+        name: hackbgrt-build
+        path: path/to/build/folder
