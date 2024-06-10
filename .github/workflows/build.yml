@@ -7,22 +7,24 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up MSYS2
-      uses: msys2/setup-msys2@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
       with:
-        update: true
-        install: >-
-          make
-          mingw-w64-x86_64-gcc
+        repository: 'Metabolix/HackBGRT'
+        ref: 'main'
+        submodules: 'recursive' # Ensures submodules are checked out
 
-    - name: Build with Make
+    - name: Install Clang
+      uses: egor-tensin/setup-clang@v1
+      with:
+        version: 'latest'
+
+    - name: Build using Makefile
       run: |
-        mingw32-make
+        make CC=clang # Assumes the Makefile is configured for Clang and GNU-EFI
 
     - name: Upload Build Folder
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v2
       with:
         name: hackbgrt-build
-        path: path/to/build/folder
+        path: path/to/build/folder # Replace with the actual build folder path
